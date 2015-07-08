@@ -1,2 +1,2 @@
 # dotfiles
-My dotfiles for various programs
+My dotfiles for various programs.
