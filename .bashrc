@@ -97,6 +97,7 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 # You may want to put all your additions into a separate file like
 # ~/.bash_aliases, instead of adding them here directly.
 # See /usr/share/doc/bash-doc/examples in the bash-doc package.
+alias em='emacs'
 
 if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
@@ -118,3 +119,9 @@ fi
 
 # rm alias to trash instead
 alias rm='trash'
+
+# add to PATH
+export PATH="$PATH:/home/$USER/bin"
+
+# mount USB_Storage on readyshare Netgear router
+#sudo mount -t cifs //192.168.1.1/USB_Storage/ /media/jocke/readyshare
