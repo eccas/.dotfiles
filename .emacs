@@ -82,6 +82,7 @@
 (add-hook 'irony-mode-hook 'company-irony-setup-begin-commands)
 (add-hook 'c++-mode-hook 'company-mode)
 (add-hook 'c-mode-hook 'company-mode)
+(setq company-clang-executable "/usr/bin/clang++-3.5")
 
 ;; company-c-headers (#include <header> completions)
 (add-to-list 'company-backends 'company-c-headers)
@@ -148,10 +149,10 @@
 (setq sr-speedbar-skip-other-window-p t)
 
 ;; TeX/LaTeX setup
-(require 'tex)
-(setq TeX-PDF-mode t)
-(TeX-global-PDF-mode t)
-(setq TeX-PDF-mode t)
+;; (require 'tex)
+;; (setq TeX-PDF-mode t)
+;; (TeX-global-PDF-mode t)
+;; (setq TeX-PDF-mode t)
 
 ;; Java setup
 (add-hook 'java-mode-hook 'set-newline-and-indent)
@@ -178,7 +179,6 @@
 (global-set-key (kbd "C-z") 'undo)
 
 (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
-(add-to-list 'load-path "~/.emacs.d/")
 
 (require 'iso-transl)
 
