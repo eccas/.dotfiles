@@ -1,5 +1,5 @@
 # Path to your oh-my-zsh installation.
-  export ZSH=/home/jocke/.oh-my-zsh
+export ZSH=/home/jocke/.oh-my-zsh
 
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
@@ -10,7 +10,6 @@
 #ZSH_THEME="simple"
 #ZSH_THEME="jreese"
 ZSH_THEME="af-magic"
-
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
@@ -95,3 +94,35 @@ fi
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+
+# Emacs keymap
+bindkey -e
+
+# Copy region to x clipboard and unselect
+x-copy-region-as-kill () {
+    zle copy-region-as-kill
+    zle set-mark-command -n -1
+    print -rn $CUTBUFFER | xsel -i
+}
+
+# Kill region to x clipboard
+x-kill-region () {
+    zle kill-region
+    print -rn $CUTBUFFER | xsel -i
+}
+
+# Yank from x-clipboard
+x-yank () {
+    CUTBUFFER=$(xsel -o -p </dev/null)
+    zle yank
+}
+
+# Add widgets to zle
+zle -N x-copy-region-as-kill
+zle -N x-kill-region
+zle -N x-yank
+
+# Rebind kill, copy and yank to x clipboard equivalents
+bindkey "^w" x-kill-region
+bindkey "^[w" x-copy-region-as-kill
+bindkey "^Y" x-yank

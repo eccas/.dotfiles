@@ -1,7 +1,5 @@
 #!/bin/bash
 
-# Remember: base16-gnome-terminal
-
 # This symlinks all the dotfiles to ~/
 # This is safe to run multiple times and will prompt you about anything unclear
 # This is a messy edit of paulirish's and alrra's nice work
