@@ -43,7 +43,7 @@ values."
      (latex :variables
             latex-enable-auto-fill t
             latex-enable-folding t)
-     ;; markdown
+     markdown
      ;; (shell :variables
      ;;        shell-default-height 30
      ;;        shell-default-position 'bottom)
@@ -53,9 +53,9 @@ values."
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages, then consider creating a layer. You can also put the
    ;; configuration in `dotspacemacs/user-config'.
-   dotspacemacs-additional-packages '(irony company-irony flycheck-irony flycheck-google-cpplint)
+   dotspacemacs-additional-packages '(irony company-irony flycheck-irony flycheck-google-cpplint powerline)
    ;; A list of packages and/or extensions that will not be install and loaded.
-   dotspacemacs-excluded-packages '(vi-tilde-fringe)
+   dotspacemacs-excluded-packages '(vi-tilde-fringe spaceline)
    ;; If non-nil spacemacs will delete any orphan packages, i.e. packages that
    ;; are declared in a layer which is not a member of
    ;; the list `dotspacemacs-configuration-layers'. (default t)
@@ -271,11 +271,9 @@ before packages are loaded. If you are unsure, you should try in setting them in
   ;;(setq flycheck-c/c++-googlelint-executable "/usr/local/bin/cpplint.py")
   ;;(setq flycheck-googlelint-filter "-legal/copyright,-build/header_guard,-build/c++11,-whitespace,-runtime/references,-build/include,-readability/todo,-readability/braces")
   (setq company-clang-executable "/usr/bin/clang++-3.5")
+  (setq flycheck-c/c++-clang-executable "/usr/bin/clang++-3.5")
 
-  ;;(setq flycheck-c/c++-clang-executable "/usr/bin/clang++-3.5")
-  ;;(setq flycheck-c/c++-gcc-executable "/usr/bin/gcc")
-
-  ;; flycheck-google-cpplint 
+  ;; flycheck-google-cpplint
   ;; (eval-after-load 'flycheck
   ;;   '(progn
   ;;      (require 'flycheck-google-cpplint)
@@ -302,6 +300,11 @@ you should place your code here."
 
   ;; LaTeX full document preview
   (add-hook 'doc-view-mode-hook 'auto-revert-mode)
+
+  ;; Replace spaceline with powerline to get better scrolling performance
+  ;; To bring spaceline back, remove it from dotspacemacs-excluded-packages
+  (require 'powerline)
+  (powerline-default-theme)
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
