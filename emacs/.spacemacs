@@ -294,9 +294,22 @@ layers configuration.
 This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
+
+  (define-key evil-emacs-state-map (kbd "C-z") nil)
   (global-set-key (kbd "C-z") 'undo)
   (global-set-key (kbd "C-v") 'scroll-up)
   (global-set-key (kbd "M-v") 'scroll-down)
+  (global-set-key (kbd "C-s") 'isearch-forward-regexp)
+  (global-set-key (kbd "C-r") 'isearch-backward-regexp)
+
+  ;; Make helm behave more like ido
+  (defun fu/helm-find-files-navigate-back (orig-fun &rest args)
+    (if (= (length helm-pattern) (length (helm-find-files-initial-input)))
+        (helm-find-files-up-one-level 1)
+      (apply orig-fun args)))
+  (advice-add 'helm-ff-delete-char-backward :around #'fu/helm-find-files-navigate-back)
+  (require 'helm)
+  (define-key helm-find-files-map (kbd "<return>") 'helm-execute-persistent-action)
 
   ;; LaTeX full document preview
   (add-hook 'doc-view-mode-hook 'auto-revert-mode)
@@ -305,6 +318,10 @@ you should place your code here."
   ;; To bring spaceline back, remove it from dotspacemacs-excluded-packages
   (require 'powerline)
   (powerline-default-theme)
+
+  ;; Turn off persistent highlight of searches
+  (setq global-evil-search-highlight-persist -1)
+
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
