@@ -303,12 +303,17 @@ you should place your code here."
   (global-set-key (kbd "C-r") 'isearch-backward-regexp)
 
   ;; Make helm behave more like ido
+  (require 'helm)
   (defun fu/helm-find-files-navigate-back (orig-fun &rest args)
     (if (= (length helm-pattern) (length (helm-find-files-initial-input)))
         (helm-find-files-up-one-level 1)
       (apply orig-fun args)))
   (advice-add 'helm-ff-delete-char-backward :around #'fu/helm-find-files-navigate-back)
-  (require 'helm)
+  (defun fu/helm-find-files-navigate-forward (orig-fun &rest args)
+    (if (file-directory-p (helm-get-selection))
+        (apply orig-fun args)
+      (helm-maybe-exit-minibuffer)))
+  (advice-add 'helm-execute-persistent-action :around #'fu/helm-find-files-navigate-forward)
   (define-key helm-find-files-map (kbd "<return>") 'helm-execute-persistent-action)
 
   ;; LaTeX full document preview
