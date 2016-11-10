@@ -330,6 +330,9 @@ you should place your code here."
   ;; Objective-C settings
   (add-to-list 'auto-mode-alist '("\\.mm\\'" . objc-mode))
 
+  ;; Make sure that lisp state is not entered after e.g. sexp slurp
+  (setq evil-lisp-state-enter-lisp-state-on-command nil)
+
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
@@ -346,10 +349,7 @@ you should place your code here."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(lazy-highlight ((t (:inherit highlight :background "#75715E" :foreground "#F8F8F2"))))
  '(isearch ((t (:inherit region :background "#679A01" :foreground "#F8F8F2"))))
- '(sp-show-pair-match-face ((t (:background "#272822" :foreground "#679A01"
-                                            :weight bold :inverse-video t))))
- '(sp-show-pair-mismatch-face ((t (:background "#272822" :foreground "#F20055"
-                                               :weight bold :inverse-video t))))
- )
+ '(lazy-highlight ((t (:inherit highlight :background "#75715E" :foreground "#F8F8F2"))))
+ '(sp-show-pair-match-face ((t (:background "#272822" :foreground "#679A01" :weight bold :inverse-video t))))
+ '(sp-show-pair-mismatch-face ((t (:background "#272822" :foreground "#F20055" :weight bold :inverse-video t)))))
