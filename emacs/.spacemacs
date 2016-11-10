@@ -27,7 +27,7 @@ values."
      semantic
      better-defaults
      emacs-lisp
-     git
+     ;git
      (python :variables
              python-enable-yapf-format-on-save t)
      org
@@ -116,7 +116,7 @@ values."
                          leuven
                          zenburn)
    ;; If non nil the cursor color matches the state color in GUI Emacs.
-   dotspacemacs-colorize-cursor-according-to-state t
+   dotspacemacs-colorize-cursor-according-to-state nil
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
    ;; size to make separators look not too crappy.
    dotspacemacs-default-font '("Source Code Pro"
@@ -321,8 +321,26 @@ you should place your code here."
 
   ;; Turn off persistent highlight of searches
   (setq global-evil-search-highlight-persist -1)
-
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions
+
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(lazy-highlight ((t (:inherit highlight :background "#75715E" :foreground "#F8F8F2"))))
+ '(isearch ((t (:inherit region :background "#679A01" :foreground "#F8F8F2"))))
+ '(sp-show-pair-match-face ((t (:background "#272822" :foreground "#679A01"
+                                            :weight bold :inverse-video t))))
+ '(sp-show-pair-mismatch-face ((t (:background "#272822" :foreground "#F20055"
+                                               :weight bold :inverse-video t))))
+ )

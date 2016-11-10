@@ -11,6 +11,9 @@ export ZSH=$HOME/.oh-my-zsh
 #ZSH_THEME="jreese"
 ZSH_THEME="af-magic"
 
+# 256 color support
+export TERM=xterm-256color
+
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
 
