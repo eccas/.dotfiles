@@ -191,7 +191,7 @@ values."
    ;; If non nil a progress bar is displayed when spacemacs is loading. This
    ;; may increase the boot time on some systems and emacs builds, set it to
    ;; nil to boost the loading time. (default t)
-   dotspacemacs-loading-progress-bar nil
+   dotspacemacs-loading-progress-bar t
    ;; If non nil the frame is fullscreen when Emacs starts up. (default nil)
    ;; (Emacs 24.4+ only)
    dotspacemacs-fullscreen-at-startup nil
@@ -211,7 +211,7 @@ values."
    ;; Transparency can be toggled through `toggle-transparency'. (default 90)
    dotspacemacs-inactive-transparency 90
    ;; If non nil unicode symbols are displayed in the mode line. (default t)
-   dotspacemacs-mode-line-unicode-symbols t
+   dotspacemacs-mode-line-unicode-symbols nil
    ;; If non nil smooth scrolling (native-scrolling) is enabled. Smooth
    ;; scrolling overrides the default behavior of Emacs which recenters the
    ;; point when it reaches the top or bottom of the screen. (default t)
@@ -285,9 +285,6 @@ before packages are loaded. If you are unsure, you should try in setting them in
   ;; Turn on flyspell for certain hooks
   (dolist (hook '(latex-mode-hook LaTeX-mode-hook))
     (add-hook hook (lambda () (flyspell-mode t))))
-
-  ;; Always follow symlinks
-  (setq vc-follow-symlinks t)
   )
 
 (defun dotspacemacs/user-config ()
@@ -330,6 +327,12 @@ you should place your code here."
   ;; Turn off persistent highlight of searches
   (setq global-evil-search-highlight-persist -1)
 
+  ;; Objective-C settings
+  (add-to-list 'auto-mode-alist '("\\.mm\\'" . objc-mode))
+
+  ;; Make sure that lisp state is not entered after e.g. sexp slurp
+  (setq evil-lisp-state-enter-lisp-state-on-command nil)
+
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
@@ -346,10 +349,7 @@ you should place your code here."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(lazy-highlight ((t (:inherit highlight :background "#75715E" :foreground "#F8F8F2"))))
  '(isearch ((t (:inherit region :background "#679A01" :foreground "#F8F8F2"))))
- '(sp-show-pair-match-face ((t (:background "#272822" :foreground "#679A01"
-                                            :weight bold :inverse-video t))))
- '(sp-show-pair-mismatch-face ((t (:background "#272822" :foreground "#F20055"
-                                               :weight bold :inverse-video t))))
- )
+ '(lazy-highlight ((t (:inherit highlight :background "#75715E" :foreground "#F8F8F2"))))
+ '(sp-show-pair-match-face ((t (:background "#272822" :foreground "#679A01" :weight bold :inverse-video t))))
+ '(sp-show-pair-mismatch-face ((t (:background "#272822" :foreground "#F20055" :weight bold :inverse-video t)))))
