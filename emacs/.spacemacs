@@ -191,7 +191,7 @@ values."
    ;; If non nil a progress bar is displayed when spacemacs is loading. This
    ;; may increase the boot time on some systems and emacs builds, set it to
    ;; nil to boost the loading time. (default t)
-   dotspacemacs-loading-progress-bar t
+   dotspacemacs-loading-progress-bar nil
    ;; If non nil the frame is fullscreen when Emacs starts up. (default nil)
    ;; (Emacs 24.4+ only)
    dotspacemacs-fullscreen-at-startup nil
@@ -285,6 +285,9 @@ before packages are loaded. If you are unsure, you should try in setting them in
   ;; Turn on flyspell for certain hooks
   (dolist (hook '(latex-mode-hook LaTeX-mode-hook))
     (add-hook hook (lambda () (flyspell-mode t))))
+
+  ;; Always follow symlinks
+  (setq vc-follow-symlinks t)
   )
 
 (defun dotspacemacs/user-config ()
@@ -321,6 +324,7 @@ you should place your code here."
 
   ;; Turn off persistent highlight of searches
   (setq global-evil-search-highlight-persist -1)
+
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
