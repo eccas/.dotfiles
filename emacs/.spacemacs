@@ -53,7 +53,7 @@ values."
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages, then consider creating a layer. You can also put the
    ;; configuration in `dotspacemacs/user-config'.
-   dotspacemacs-additional-packages '(irony company-irony flycheck-irony flycheck-google-cpplint powerline)
+   dotspacemacs-additional-packages '(powerline)
    ;; A list of packages and/or extensions that will not be install and loaded.
    dotspacemacs-excluded-packages '(vi-tilde-fringe spaceline)
    ;; If non-nil spacemacs will delete any orphan packages, i.e. packages that
@@ -253,38 +253,12 @@ executes.
  This function is mostly useful for variables that need to be set
 before packages are loaded. If you are unsure, you should try in setting them in
 `dotspacemacs/user-config' first."
-  (add-hook 'c-mode-hook 'flycheck-mode)
-  (add-hook 'c++-mode-hook 'flycheck-mode)
-  (add-hook 'c++-mode-hook 'irony-mode)
-  (defun my-irony-mode-hook ()
-    (define-key irony-mode-map [remap completion-at-point]
-      'irony-completion-at-point-async)
-    (define-key irony-mode-map [remap complete-symbol]
-      'irony-completion-at-point-async))
-  (add-hook 'irony-mode-hook 'my-irony-mode-hook)
-  (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
-  (eval-after-load 'flycheck '(add-hook 'flycheck-mode-hook #'flycheck-irony-setup))
-  ;;(add-hook 'c++-mode-hook (lambda () (setq flycheck-gcc-language-standard "c++11")))
-  ;;(add-hook 'c++-mode-hook (lambda () (setq flycheck-clang-standard-library "libc++")))
-  (add-hook 'irony-mode-hook 'company-irony-setup-begin-commands)
-  (setq irony-additional-clang-options (quote ("-std=c++11")))
-  ;;(setq flycheck-c/c++-googlelint-executable "/usr/local/bin/cpplint.py")
-  ;;(setq flycheck-googlelint-filter "-legal/copyright,-build/header_guard,-build/c++11,-whitespace,-runtime/references,-build/include,-readability/todo,-readability/braces")
-  (setq company-clang-executable "/usr/bin/clang++-3.5")
-  (setq flycheck-c/c++-clang-executable "/usr/bin/clang++-3.5")
-
-  ;; flycheck-google-cpplint
-  ;; (eval-after-load 'flycheck
-  ;;   '(progn
-  ;;      (require 'flycheck-google-cpplint)
-  ;;      (flycheck-add-next-checker 'irony
-  ;;                                 'c/c++-googlelint 'append)))
-  ;; (setq flycheck-c/c++-googlelint-executable "/usr/local/bin/cpplint.py")
-  ;; (setq flycheck-googlelint-filter "-legal/copyright,-build/header_guard,-build/c++11,-whitespace,-runtime/references,-build/include,-readability/todo,-readability/braces")
-
   ;; Turn on flyspell for certain hooks
   (dolist (hook '(latex-mode-hook LaTeX-mode-hook))
     (add-hook hook (lambda () (flyspell-mode t))))
+
+  ;; Always follow symlinks
+  (setq vc-follow-symlinks t)
   )
 
 (defun dotspacemacs/user-config ()
@@ -326,6 +300,15 @@ you should place your code here."
 
   ;; Turn off persistent highlight of searches
   (setq global-evil-search-highlight-persist -1)
+
+  ;; Company-clang requires a .clang_complete file which defines all the
+  ;; compilation flags, especially include directories and language standards.
+  ;; It is possible to generate this file with the tool "cc_args.py". Download
+  ;; this file, put it in e.g. "/usr/bin/cc_args.py", then run it like this:
+  ;; 'make CXX="cc_args.py g++"'. The generated ".clang_complete" file should be
+  ;; somewhere in the current folder or somewhere up the directory tree.
+
+  ;; For clang to work, symlink the executable to /usr/bin/clang.
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
