@@ -88,6 +88,7 @@ export EDITOR=emacsclient
 export VISUAL="emacsclient -c"
 alias emacsd="emacs --daemon"
 alias em=emacsclient
+alias emacs-server-kill="emacsclient -e \"(kill-emacs)\""
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
@@ -136,8 +137,11 @@ bindkey "^w" x-kill-region
 bindkey "^[w" x-copy-region-as-kill
 bindkey "^Y" x-yank
 
+
+
 # MathWorks
 setmwe () {
     /hub/bat/common/bin/setmwe.pl sh /tmp/setmwetmp.sh.$$ $* && source /tmp/setmwetmp.sh.$$
     /bin/rm -f /tmp/setmwetmp.sh.$$
 }
+

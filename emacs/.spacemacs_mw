@@ -264,23 +264,10 @@ before packages are loaded. If you are unsure, you should try in setting them in
   (add-hook 'irony-mode-hook 'my-irony-mode-hook)
   (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
   (eval-after-load 'flycheck '(add-hook 'flycheck-mode-hook #'flycheck-irony-setup))
-  ;;(add-hook 'c++-mode-hook (lambda () (setq flycheck-gcc-language-standard "c++11")))
-  ;;(add-hook 'c++-mode-hook (lambda () (setq flycheck-clang-standard-library "libc++")))
   (add-hook 'irony-mode-hook 'company-irony-setup-begin-commands)
   (setq irony-additional-clang-options (quote ("-std=c++11")))
-  ;;(setq flycheck-c/c++-googlelint-executable "/usr/local/bin/cpplint.py")
-  ;;(setq flycheck-googlelint-filter "-legal/copyright,-build/header_guard,-build/c++11,-whitespace,-runtime/references,-build/include,-readability/todo,-readability/braces")
   (setq company-clang-executable "/usr/bin/clang++-3.5")
   (setq flycheck-c/c++-clang-executable "/usr/bin/clang++-3.5")
-
-  ;; flycheck-google-cpplint
-  ;; (eval-after-load 'flycheck
-  ;;   '(progn
-  ;;      (require 'flycheck-google-cpplint)
-  ;;      (flycheck-add-next-checker 'irony
-  ;;                                 'c/c++-googlelint 'append)))
-  ;; (setq flycheck-c/c++-googlelint-executable "/usr/local/bin/cpplint.py")
-  ;; (setq flycheck-googlelint-filter "-legal/copyright,-build/header_guard,-build/c++11,-whitespace,-runtime/references,-build/include,-readability/todo,-readability/braces")
 
   ;; Turn on flyspell for certain hooks
   (dolist (hook '(latex-mode-hook LaTeX-mode-hook))
