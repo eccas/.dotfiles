@@ -44,9 +44,8 @@ values."
             latex-enable-auto-fill t
             latex-enable-folding t)
      markdown
-     ;; (shell :variables
-     ;;        shell-default-height 30
-     ;;        shell-default-position 'bottom)
+     (shell :variables
+            shell-default-shell 'ansi-term)
      ;; version-control
      )
    ;; List of additional packages that will be installed without being
@@ -95,11 +94,11 @@ values."
    ;; directory. A string value must be a path to an image format supported
    ;; by your Emacs build.
    ;; If the value is nil then no banner is displayed. (default 'official)
-   dotspacemacs-startup-banner 'official
+   dotspacemacs-startup-banner nil
    ;; List of items to show in the startup buffer. If nil it is disabled.
    ;; Possible values are: `recents' `bookmarks' `projects'.
    ;; (default '(recents projects))
-   dotspacemacs-startup-lists '(recents projects)
+   dotspacemacs-startup-lists '(recents projects bookmarks)
    ;; Number of recent files to show in the startup buffer. Ignored if
    ;; `dotspacemacs-startup-lists' doesn't include `recents'. (default 5)
    dotspacemacs-startup-recent-list-size 5
@@ -259,7 +258,7 @@ before packages are loaded. If you are unsure, you should try in setting them in
 
   ;; Always follow symlinks
   (setq vc-follow-symlinks t)
-  )
+)
 
 (defun dotspacemacs/user-config ()
   "Configuration function for user code.
@@ -275,6 +274,12 @@ you should place your code here."
   (global-set-key (kbd "M-v") 'scroll-down)
   (global-set-key (kbd "C-s") 'isearch-forward-regexp)
   (global-set-key (kbd "C-r") 'isearch-backward-regexp)
+  (global-set-key (kbd "M-Å") 'backward-paragraph)
+  (global-set-key [\M-S-dead-circumflex] 'forward-paragraph)
+
+  ;; Scroll without moving point
+  (global-set-key (kbd "M-n") (lambda () (interactive) (scroll-up 1)))
+  (global-set-key (kbd "M-p") (lambda () (interactive) (scroll-down 1)))
 
   ;; Make helm behave more like ido
   (require 'helm)
