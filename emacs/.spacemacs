@@ -18,16 +18,18 @@ values."
    ;; of a list then all discovered layers will be installed.
    dotspacemacs-configuration-layers
    '(
+     csv
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press <SPC f e R> (Vim style) or
      ;; <M-m f e R> (Emacs style) to install them.
      ;; ----------------------------------------------------------------
-     auto-completion
+     (auto-completion :variables
+                      auto-completion-enable-help-tooltip 'manual)
      semantic
      better-defaults
      emacs-lisp
-     ;git
+     git
      (python :variables
              python-enable-yapf-format-on-save t)
      org
@@ -37,7 +39,6 @@ values."
      syntax-checking
      (c-c++ :variables
             c-c++-enable-clang-support t
-            auto-completion-enable-help-tooltip t
             c-c++-default-mode-for-headers 'c++-mode)
      cscope
      (latex :variables
@@ -54,7 +55,12 @@ values."
    ;; configuration in `dotspacemacs/user-config'.
    dotspacemacs-additional-packages '(powerline)
    ;; A list of packages and/or extensions that will not be install and loaded.
-   dotspacemacs-excluded-packages '(vi-tilde-fringe spaceline)
+   dotspacemacs-excluded-packages
+   '(
+     vi-tilde-fringe
+     spaceline
+     evil-search-highlight-persist
+     )
    ;; If non-nil spacemacs will delete any orphan packages, i.e. packages that
    ;; are declared in a layer which is not a member of
    ;; the list `dotspacemacs-configuration-layers'. (default t)
@@ -297,14 +303,18 @@ you should place your code here."
 
   ;; LaTeX full document preview
   (add-hook 'doc-view-mode-hook 'auto-revert-mode)
+  ;; Next error key-binding
+  (add-hook 'LaTeX-mode-hook
+            (lambda () (local-set-key (kbd "C-c e") 'TeX-next-error)))
 
   ;; Replace spaceline with powerline to get better scrolling performance
   ;; To bring spaceline back, remove it from dotspacemacs-excluded-packages
   (require 'powerline)
   (powerline-default-theme)
 
-  ;; Turn off persistent highlight of searches
-  (setq global-evil-search-highlight-persist -1)
+  ;; Configure flycheck
+  (add-hook 'c++-mode-hook (lambda () (setq flycheck-gcc-language-standard "c++11" )))
+  (add-hook 'c++-mode-hook (lambda () (setq flycheck-clang-language-standard "c++11" )))
 
   ;; Company-clang requires a .clang_complete file which defines all the
   ;; compilation flags, especially include directories and language standards.
@@ -336,4 +346,8 @@ you should place your code here."
                                             :weight bold :inverse-video t))))
  '(sp-show-pair-mismatch-face ((t (:background "#272822" :foreground "#F20055"
                                                :weight bold :inverse-video t))))
+ '(company-tooltip-common
+   ((t (:inherit company-tooltip :weight bold :underline nil))))
+ '(company-tooltip-common-selection
+   ((t (:inherit company-tooltip-selection :weight bold :underline nil))))
  )
