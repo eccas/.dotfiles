@@ -18,16 +18,18 @@ values."
    ;; of a list then all discovered layers will be installed.
    dotspacemacs-configuration-layers
    '(
+     csv
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press <SPC f e R> (Vim style) or
      ;; <M-m f e R> (Emacs style) to install them.
      ;; ----------------------------------------------------------------
-     auto-completion
+     (auto-completion :variables
+                      auto-completion-enable-help-tooltip 'manual)
      semantic
      better-defaults
      emacs-lisp
-     ;git
+     git
      (python :variables
              python-enable-yapf-format-on-save t)
      org
@@ -37,16 +39,14 @@ values."
      syntax-checking
      (c-c++ :variables
             c-c++-enable-clang-support t
-            auto-completion-enable-help-tooltip t
             c-c++-default-mode-for-headers 'c++-mode)
      cscope
      (latex :variables
             latex-enable-auto-fill t
             latex-enable-folding t)
      markdown
-     ;; (shell :variables
-     ;;        shell-default-height 30
-     ;;        shell-default-position 'bottom)
+     (shell :variables
+            shell-default-shell 'ansi-term)
      ;; version-control
      )
    ;; List of additional packages that will be installed without being
@@ -55,7 +55,12 @@ values."
    ;; configuration in `dotspacemacs/user-config'.
    dotspacemacs-additional-packages '(powerline)
    ;; A list of packages and/or extensions that will not be install and loaded.
-   dotspacemacs-excluded-packages '(vi-tilde-fringe spaceline)
+   dotspacemacs-excluded-packages
+   '(
+     vi-tilde-fringe
+     spaceline
+     evil-search-highlight-persist
+     )
    ;; If non-nil spacemacs will delete any orphan packages, i.e. packages that
    ;; are declared in a layer which is not a member of
    ;; the list `dotspacemacs-configuration-layers'. (default t)
@@ -95,11 +100,11 @@ values."
    ;; directory. A string value must be a path to an image format supported
    ;; by your Emacs build.
    ;; If the value is nil then no banner is displayed. (default 'official)
-   dotspacemacs-startup-banner 'official
+   dotspacemacs-startup-banner nil
    ;; List of items to show in the startup buffer. If nil it is disabled.
    ;; Possible values are: `recents' `bookmarks' `projects'.
    ;; (default '(recents projects))
-   dotspacemacs-startup-lists '(recents projects)
+   dotspacemacs-startup-lists '(recents projects bookmarks)
    ;; Number of recent files to show in the startup buffer. Ignored if
    ;; `dotspacemacs-startup-lists' doesn't include `recents'. (default 5)
    dotspacemacs-startup-recent-list-size 5
@@ -259,7 +264,7 @@ before packages are loaded. If you are unsure, you should try in setting them in
 
   ;; Always follow symlinks
   (setq vc-follow-symlinks t)
-  )
+)
 
 (defun dotspacemacs/user-config ()
   "Configuration function for user code.
@@ -275,6 +280,12 @@ you should place your code here."
   (global-set-key (kbd "M-v") 'scroll-down)
   (global-set-key (kbd "C-s") 'isearch-forward-regexp)
   (global-set-key (kbd "C-r") 'isearch-backward-regexp)
+  (global-set-key (kbd "M-Å") 'backward-paragraph)
+  (global-set-key [\M-S-dead-circumflex] 'forward-paragraph)
+
+  ;; Scroll without moving point
+  (global-set-key (kbd "M-n") (lambda () (interactive) (scroll-up 1)))
+  (global-set-key (kbd "M-p") (lambda () (interactive) (scroll-down 1)))
 
   ;; Make helm behave more like ido
   (require 'helm)
@@ -292,14 +303,18 @@ you should place your code here."
 
   ;; LaTeX full document preview
   (add-hook 'doc-view-mode-hook 'auto-revert-mode)
+  ;; Next error key-binding
+  (add-hook 'LaTeX-mode-hook
+            (lambda () (local-set-key (kbd "C-c e") 'TeX-next-error)))
 
   ;; Replace spaceline with powerline to get better scrolling performance
   ;; To bring spaceline back, remove it from dotspacemacs-excluded-packages
   (require 'powerline)
   (powerline-default-theme)
 
-  ;; Turn off persistent highlight of searches
-  (setq global-evil-search-highlight-persist -1)
+  ;; Configure flycheck
+  (add-hook 'c++-mode-hook (lambda () (setq flycheck-gcc-language-standard "c++11" )))
+  (add-hook 'c++-mode-hook (lambda () (setq flycheck-clang-language-standard "c++11" )))
 
   ;; Company-clang requires a .clang_complete file which defines all the
   ;; compilation flags, especially include directories and language standards.
@@ -331,4 +346,8 @@ you should place your code here."
                                             :weight bold :inverse-video t))))
  '(sp-show-pair-mismatch-face ((t (:background "#272822" :foreground "#F20055"
                                                :weight bold :inverse-video t))))
+ '(company-tooltip-common
+   ((t (:inherit company-tooltip :weight bold :underline nil))))
+ '(company-tooltip-common-selection
+   ((t (:inherit company-tooltip-selection :weight bold :underline nil))))
  )
