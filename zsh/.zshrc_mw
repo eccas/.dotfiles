@@ -59,7 +59,11 @@ SAVESIZE=50000
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(history)
+plugins=(
+    history
+    bd
+    colored-man-pages
+)
 #plugins=(git history)
 
 # User configuration
@@ -74,8 +78,39 @@ if [[ -f /usr/bin/dircolors && -f $HOME/.dir_colors ]]; then
     eval $(dircolors -b $HOME/.dir_colors)
 fi
 
+# make less more firendly for non-text input files, see lesspipe(1)
+[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+
+# Fix weird issue where less would open a new zsh shell
+alias less="SHELL=/bin/sh less"
+
+# Alias sudo to enable aliases when using sudo
+alias sudo='sudo '
+
+# Navigate to a sandbox
+sbcd () {
+    local i=1
+    local sbpath
+    for sbpath in $(find /mathworks/devel/sbs -maxdepth 2 -name "jsjunneb*" -type d); do
+        echo " $i: $sbpath"
+        i=$((i+1))
+    done
+
+
+    read "idx?Enter the number of the sandbox to navigate to: "
+
+    i=1
+    for sbpath in $(find /mathworks/devel/sbs -maxdepth 2 -name "jsjunneb*" -type d); do
+        if [ $i -eq $idx ]; then
+            cd $sbpath/matlab
+        fi
+        i=$((i+1))
+    done
+}
+
 # You may need to manually set your language environment
-# export LANG=en_US.UTF-8
+export LANG=en_US.UTF-8
+export LC_CTYPE=en_US.UTF-8
 
 # Preferred editor for local and remote sessions
 # if [[ -n $SSH_CONNECTION ]]; then
@@ -84,10 +119,12 @@ fi
 #   export EDITOR='mvim'
 # fi
 export ALTERNATE_EDITOR=emacs
-export EDITOR=emacsclient
+export EDITOR="emacsclient -c"
 export VISUAL="emacsclient -c"
-alias emacsd="emacs --daemon"
-alias em=emacsclient
+export P4EDITOR="emacsclient -c"
+alias emd="emacs --daemon" # Start emacs server
+alias em="emacsclient -n" # Start emacsclient in an existing frame, do not wait for C-x #
+alias emc="emacsclient -c -n" # Start emacsclient in a new frame, do not wait for C-x #
 alias emacs-server-kill="emacsclient -e \"(kill-emacs)\""
 
 # Compilation flags
@@ -104,6 +141,10 @@ alias emacs-server-kill="emacsclient -e \"(kill-emacs)\""
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+alias runBash="FORCE_BASH=1 bash"
+
+# Aliases
+alias sblist="mw -using Bmain sbs list"
 
 # Emacs keymap
 bindkey -e
@@ -133,15 +174,38 @@ zle -N x-kill-region
 zle -N x-yank
 
 # Rebind kill, copy and yank to x clipboard equivalents
-bindkey "^w" x-kill-region
-bindkey "^[w" x-copy-region-as-kill
-bindkey "^Y" x-yank
+# bindkey "^w" x-kill-region
+# bindkey "^[w" x-copy-region-as-kill
+# bindkey "^Y" x-yank
 
-
+# Fix Mac issues with key bindings
+if [[ "$(uname -s)" == "Darwin" ]]; then
+	# 0 . Enter
+	bindkey -s "^[Op" "0"
+	bindkey -s "^[On" "."
+	bindkey -s "^[OM" "^M"
+	# 1 2 3
+	bindkey -s "^[Oq" "1"
+	bindkey -s "^[Or" "2"
+	bindkey -s "^[Os" "3"
+	# 4 5 6
+	bindkey -s "^[Ot" "4"
+	bindkey -s "^[Ou" "5"
+	bindkey -s "^[Ov" "6"
+	# 7 8 9
+	bindkey -s "^[Ow" "7"
+	bindkey -s "^[Ox" "8"
+	bindkey -s "^[Oy" "9"
+	# + -  * /
+	bindkey -s "^[Ok" "+"
+	bindkey -s "^[Om" "-"
+	bindkey -s "^[Oj" "*"
+	bindkey -s "^[Oo" "/"
+fi
 
 # MathWorks
 setmwe () {
     /hub/bat/common/bin/setmwe.pl sh /tmp/setmwetmp.sh.$$ $* && source /tmp/setmwetmp.sh.$$
     /bin/rm -f /tmp/setmwetmp.sh.$$
 }
-
+export P4LOGINSSO=/hub/bat/share/p4admin.latest/sso/sso-client

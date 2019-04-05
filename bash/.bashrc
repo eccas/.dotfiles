@@ -30,6 +30,9 @@ shopt -s checkwinsize
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
+# Fix weird issue where less would open a new zsh shell
+alias less="SHELL=/bin/sh less"
+
 # set variable identifying the chroot you work in (used in the prompt below)
 if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
     debian_chroot=$(cat /etc/debian_chroot)
@@ -97,7 +100,13 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 # You may want to put all your additions into a separate file like
 # ~/.bash_aliases, instead of adding them here directly.
 # See /usr/share/doc/bash-doc/examples in the bash-doc package.
-alias em='emacs'
+export ALTERNATE_EDITOR=emacs
+export EDITOR=emacsclient
+export VISUAL="emacsclient -c"
+alias emacsd="emacs --daemon"
+alias em=emacsclient
+alias emacs-server-kill="emacsclient -e \"(kill-emacs)\""
+
 
 if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
@@ -114,14 +123,5 @@ if ! shopt -oq posix; then
   fi
 fi
 
-#ROOT path setup
-. /usr/local/bin/root/bin/thisroot.sh
-
-# rm alias to trash instead
-alias rm='trash'
-
 # add to PATH
-export PATH="$PATH:/home/$USER/bin"
-
-# mount USB_Storage on readyshare Netgear router
-#sudo mount -t cifs //192.168.1.1/USB_Storage/ /media/jocke/readyshare
+# export PATH="$PATH:/home/$USER/bin"
