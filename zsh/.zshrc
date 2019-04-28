@@ -1,34 +1,26 @@
 # Path to your oh-my-zsh installation.
-export ZSH=$HOME/.oh-my-zsh
+export ZSH="/Users/jsjunnebo/.oh-my-zsh"
 
-# Set name of the theme to load.
-# Look in ~/.oh-my-zsh/themes/
-# Optionally, if you set this to "random", it'll load a random theme each
-# time that oh-my-zsh is loaded.
-#ZSH_THEME="robbyrussell"
-#ZSH_THEME="kafeitu"
-#ZSH_THEME="simple"
-#ZSH_THEME="jreese"
-ZSH_THEME="af-magic"
+# Set name of the theme to load --- if set to "random", it will
+# load a random theme each time oh-my-zsh is loaded, in which case,
+# to know which specific one was loaded, run: echo $RANDOM_THEME
+# See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
+# ZSH_THEME="robbyrussell"
+ZSH_THEME="agnoster"
+DEFAULT_USER=jsjunnebo
 
-# 256 color support
-export TERM=xterm-256color
+# Set list of themes to pick from when loading at random
+# Setting this variable when ZSH_THEME=random will cause zsh to load
+# a theme from this variable instead of looking in ~/.oh-my-zsh/themes/
+# If set to an empty array, this variable will have no effect.
+# ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
 
-# Uncomment the following line to use hyphen-insensitive completion. Case
-# sensitive completion must be off. _ and - will be interchangeable.
+# Uncomment the following line to use hyphen-insensitive completion.
+# Case-sensitive completion must be off. _ and - will be interchangeable.
 # HYPHEN_INSENSITIVE="true"
-
-# Uncomment the following line to disable bi-weekly auto-update checks.
-# DISABLE_AUTO_UPDATE="true"
-
-# Uncomment the following line to change how often to auto-update (in days).
-# export UPDATE_ZSH_DAYS=13
-
-# Uncomment the following line to disable colors in ls.
-# DISABLE_LS_COLORS="true"
 
 # Uncomment the following line to disable auto-setting terminal title.
 # DISABLE_AUTO_TITLE="true"
@@ -37,7 +29,7 @@ export TERM=xterm-256color
 # ENABLE_CORRECTION="true"
 
 # Uncomment the following line to display red dots whilst waiting for completion.
-# COMPLETION_WAITING_DOTS="true"
+COMPLETION_WAITING_DOTS="true"
 
 # Uncomment the following line if you want to disable marking untracked files
 # under VCS as dirty. This makes repository status check for large repositories
@@ -46,33 +38,65 @@ export TERM=xterm-256color
 
 # Uncomment the following line if you want to change the command execution time
 # stamp shown in the history command output.
-# The optional three formats: "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
-# HIST_STAMPS="mm/dd/yyyy"
+# You can set one of the optional three formats:
+# "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
+# or set a custom format using the strftime function format specifications,
+# see 'man strftime' for details.
+HIST_STAMPS="yyyy-mm-dd"
 HISTFILE=$HOME/.zsh_history
-HISTSIZE=50000
-SAVESIZE=50000
+HISTSIZE=100000
+SAVEHIST=10000
 
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
-# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
+# Which plugins would you like to load?
+# Standard plugins can be found in ~/.oh-my-zsh/plugins/*
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git history colored-man-pages)
-
-# User configuration
-
-# export PATH="/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
-# export MANPATH="/usr/local/man:$MANPATH"
+plugins=(
+    git
+    git-extras
+    # bd
+    colored-man-pages
+    osx
+    zsh-completions
+)
 
 source $ZSH/oh-my-zsh.sh
 
-# Dircolors
-if [[ -f /usr/bin/dircolors && -f $HOME/.dir_colors ]]; then
-    eval $(dircolors -b $HOME/.dir_colors)
+# User configuration
+
+# Detect which `ls` flavor is in use
+if ls --color > /dev/null 2>&1; then # GNU `ls`
+	  colorflag="--color"
+    if [[ -f $HOME/.dir_colors ]]; then
+        eval $(gdircolors -b $HOME/.dir_colors)
+    fi
+else # macOS `ls`
+	  colorflag="-G"
 fi
 
+# Setup fzf
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+_fzf_compgen_path() {
+    fd --hidden --follow --exclude ".git" . "$1"
+}
+
+_fzf_compgen_dir() {
+    fd --type d --hidden --follow --exclude ".git" . "$1"
+}
+
+
+export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_CTRL_T_OPTS="--preview '(bat --style=numbers --color=always {} || cat {}) 2> /dev/null | head -500'"
+export FZF_ALT_C_COMMAND='fd --type d --hidden --no-ignore'
+export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
+
+#
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
 
@@ -82,12 +106,17 @@ fi
 # else
 #   export EDITOR='mvim'
 # fi
+# export ALTERNATE_EDITOR=emacs
+# export EDITOR="emacsclient -c"
+# export VISUAL="emacsclient -c"
+# export P4EDITOR="emacsclient -c"
+# alias emd="emacs --daemon" # Start emacs server
+# alias em="emacsclient -n" # Start emacsclient in an existing frame, do not wait for C-x #
+# alias emc="emacsclient -c -n" # Start emacsclient in a new frame, do not wait for C-x #
+# alias emacs-server-kill="emacsclient -e \"(kill-emacs)\""
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
-
-# ssh
-# export SSH_KEY_PATH="~/.ssh/dsa_id"
 
 # Set personal aliases, overriding those provided by oh-my-zsh libs,
 # plugins, and themes. Aliases can be placed here, though oh-my-zsh
@@ -98,34 +127,20 @@ fi
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-# Emacs keymap
-bindkey -e
+# Custom git command for dotfile config
+alias config='git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 
-# Copy region to x clipboard and unselect
-x-copy-region-as-kill () {
-    zle copy-region-as-kill
-    zle set-mark-command -n -1
-    print -rn $CUTBUFFER | xsel -i
-}
+# Alias sudo to enable aliases when using sudo
+alias sudo='sudo '
 
-# Kill region to x clipboard
-x-kill-region () {
-    zle kill-region
-    print -rn $CUTBUFFER | xsel -i
-}
+# List all files colorized in long format
+alias l="ls -lF ${colorflag}"
 
-# Yank from x-clipboard
-x-yank () {
-    CUTBUFFER=$(xsel -o -p </dev/null)
-    zle yank
-}
+# List all files colorized in long format, excluding . and ..
+alias la="ls -lAF ${colorflag}"
 
-# Add widgets to zle
-zle -N x-copy-region-as-kill
-zle -N x-kill-region
-zle -N x-yank
+# List only directories
+alias lsd="ls -lF ${colorflag} | grep --color=never '^d'"
 
-# Rebind kill, copy and yank to x clipboard equivalents
-bindkey "^w" x-kill-region
-bindkey "^[w" x-copy-region-as-kill
-bindkey "^Y" x-yank
+# Always use color output for `ls`
+alias ls="command ls ${colorflag}"
